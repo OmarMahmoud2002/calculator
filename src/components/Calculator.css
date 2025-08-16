@@ -1,0 +1,74 @@
+.calculator-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  background: #f0f2f5;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.grid-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-areas:
+    "scientific scientific"
+    "numbers operators";
+}
+
+.scientific-panel {
+  grid-area: scientific;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 0.5rem;
+}
+
+.main-panel {
+  grid-area: numbers;
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.operator-panel {
+  grid-area: operators;
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .calculator-container {
+    max-width: 600px;
+    padding: 2rem;
+  }
+  
+  .grid-layout {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "scientific scientific"
+      "numbers operators";
+  }
+  
+  .operator-panel {
+    grid-template-rows: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-layout {
+    grid-template-areas:
+      "scientific"
+      "numbers"
+      "operators";
+  }
+  
+  .operator-panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .number-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

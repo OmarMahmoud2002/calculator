@@ -1,3 +1,4 @@
+import './components/Calculator.css';
 import Wrapper from "./components/Wrapper";
 import Screen from "./components/Screen";
 import Button from './components/Button'
@@ -19,27 +20,31 @@ function App() {
   return (
     <CalcProvider>
       <Wrapper>
-        <Screen />
-        <div className="calculator-body">
-          <div className="scientific-row">
-            {scientificValues.map((btn, i) => (
-              <Button value={btn} key={`sci-${i}`} />
-            ))}
-          </div>
-          <div className="main-calculator">
-            <div className="left-panel">
-              {btnValues.flat().map((btn, i) => (
-                <Button value={btn} key={`main-${i}`} />
+        <div className="calculator-container">
+          <Screen />
+          <div className="grid-layout">
+            <div className="scientific-panel">
+              {scientificValues.map((btn, i) => (
+                <Button value={btn} key={`sci-${i}`} />
               ))}
             </div>
-            <div className="right-panel">
+            
+            <div className="main-panel">
+              <div className="number-grid">
+                {btnValues.flat().map((btn, i) => (
+                  <Button value={btn} key={`main-${i}`} />
+                ))}
+              </div>
+            </div>
+            
+            <div className="operator-panel">
               {operatorValues.map((btn, i) => (
                 <Button value={btn} key={`op-${i}`} />
               ))}
             </div>
           </div>
+          <History />
         </div>
-        <History />
       </Wrapper>
     </CalcProvider>
   );
