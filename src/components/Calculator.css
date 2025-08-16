@@ -1,10 +1,10 @@
 .calculator-container {
   max-width: 100%;
   margin: 0 auto;
-  padding: 1rem;
-  background: #f0f2f5;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .grid-layout {
@@ -13,13 +13,15 @@
   grid-template-areas:
     "scientific scientific"
     "numbers operators";
+  grid-template-columns: 3fr 1fr;
 }
 
 .scientific-panel {
   grid-area: scientific;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .main-panel {
@@ -29,30 +31,33 @@
 .number-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .operator-panel {
   grid-area: operators;
   display: grid;
-  gap: 0.5rem;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.75rem;
 }
 
-@media (min-width: 768px) {
-  .calculator-container {
-    max-width: 600px;
-    padding: 2rem;
+@media (max-width: 768px) {
+  .grid-layout {
+    gap: 0.75rem;
+    grid-template-columns: 2fr 1fr;
   }
   
-  .grid-layout {
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "scientific scientific"
-      "numbers operators";
+  .scientific-panel {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .number-grid {
+    gap: 0.5rem;
   }
   
   .operator-panel {
-    grid-template-rows: repeat(4, 1fr);
+    gap: 0.5rem;
   }
 }
 
@@ -62,13 +67,30 @@
       "scientific"
       "numbers"
       "operators";
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .scientific-panel {
+    grid-template-columns: repeat(5, 1fr);
   }
   
   .operator-panel {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
   }
   
   .number-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 320px) {
+  .scientific-panel {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid-layout {
+    gap: 0.5rem;
   }
 }

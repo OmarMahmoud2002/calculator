@@ -4,9 +4,21 @@ import { Textfit } from 'react-textfit';
 
 const Screen = () => {
   const { calc } = useContext(CalcContext);
+  
+  const formatDisplay = (value) => {
+    if (value === Infinity) return "Error";
+    if (value === -Infinity) return "Error";
+    if (isNaN(value)) return "Error";
+    if (value === 0) return "0";
+    return value;
+  };
+  
+  const displayValue = calc.num !== 0 ? calc.num : calc.res;
 
   return (
-    <Textfit className="screen" max={70}  mode="single">{calc.num ? calc.num : calc.res}</Textfit>
+    <Textfit className="screen" max={70} mode="single">
+      {formatDisplay(displayValue)}
+    </Textfit>
   )
 }
 

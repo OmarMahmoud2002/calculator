@@ -29,7 +29,12 @@ const Button = ({ value }) => {
   }
   // User click C
   const resetClick = () => {
-    setCalc({ sign: '', num: 0, res: 0 })
+    setCalc({ 
+      sign: '', 
+      num: 0, 
+      res: 0,
+      history: calc.history || []
+    })
   }
   // User click number
   const handleClickButton = () => {
@@ -50,6 +55,7 @@ const Button = ({ value }) => {
   // User click operation
   const signClick = () => {
     setCalc({
+      ...calc,
       sign: value,
       res: !calc.res && calc.num ? calc.num : calc.res,
       num: 0
@@ -63,7 +69,7 @@ const Button = ({ value }) => {
           '+': (a, b) => a + b,
           '-': (a, b) => a - b,
           'x': (a, b) => a * b,
-          '/': (a, b) => a / b,
+          '/': (a, b) => b !== 0 ? a / b : "Error",
         }
         return result[sign](a, b);
       }
@@ -73,13 +79,14 @@ const Button = ({ value }) => {
         res: result,
         sign: '',
         num: 0,
-        history: [...calc.history, {operation, result}]
+        history: [...(calc.history || []), {operation, result}]
       })
     }
   }
   // User click persen
   const persenClick = () => {
     setCalc({
+      ...calc,
       num: (calc.num / 100),
       res: (calc.res / 100),
       sign: ''
@@ -88,6 +95,7 @@ const Button = ({ value }) => {
   // User click invert button
   const invertClick = () => {
     setCalc({
+      ...calc,
       num: calc.num ? calc.num * -1 : 0,
       res: calc.res ? calc.res * -1 : 0,
       sign: ''
@@ -100,7 +108,7 @@ const Button = ({ value }) => {
     
     switch(value) {
       case '√': 
-        result = Math.sqrt(currentValue);
+        result = currentValue >= 0 ? Math.sqrt(currentValue) : "Error";
         break;
       case 'x²':
         result = Math.pow(currentValue, 2);
@@ -122,7 +130,8 @@ const Button = ({ value }) => {
       ...calc,
       num: result,
       res: result,
-      sign: ''
+      sign: '',
+      history: calc.history || []
     });
   };
 
