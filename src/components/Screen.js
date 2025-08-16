@@ -10,7 +10,15 @@ const Screen = () => {
     if (value === -Infinity) return "Error";
     if (isNaN(value)) return "Error";
     if (value === 0) return "0";
-    return value;
+    
+    // Format large numbers and limit decimal places
+    if (typeof value === 'number') {
+        if (Math.abs(value) >= 1e12) {
+            return value.toExponential(6);
+        }
+        return value.toString().length > 12 ? value.toPrecision(12) : value;
+    }
+    return value; // Return "Error" string directly
   };
   
   const displayValue = calc.num !== 0 ? calc.num : calc.res;

@@ -38,18 +38,31 @@ const Button = ({ value }) => {
   }
   // User click number
   const handleClickButton = () => {
-    const numberString = value.toString()
-
-    let numberValue;
-    if(numberString === '0' && calc.num === 0) {
-      numberValue = "0"
-    } else {
-      numberValue = Number(calc.num + numberString)
+    // Reset if previous result was error
+    const currentValue = calc.num === "Error" ? "0" : calc.num.toString();
+    
+    // Limit to 12 digits max
+    if (currentValue.replace('.', '').length >= 12) {
+        return;
     }
 
+    let numberValue;
+    const numberString = value.toString();
+    
+    // Handle decimal point
+    if (numberString === '.') {
+        if (currentValue.includes('.')) return;
+        numberValue = currentValue + '.';
+    } else {
+        numberValue = currentValue === '0' ? numberString : currentValue + numberString;
+    }
+
+    // Convert back to number if not ending with decimal
+    const numericValue = numberValue.endsWith('.') ? numberValue : Number(numberValue);
+    
     setCalc({
-      ...calc,
-      num: numberValue
+        ...calc,
+        num: numericValue
     })
   }
   // User click operation
@@ -65,13 +78,20 @@ const Button = ({ value }) => {
   const equalsClick = () => {
     if(calc.res && calc.num) {
       const math = (a, b, sign) => {
-        const result = {
-          '+': (a, b) => a + b,
-          '-': (a, b) => a - b,
-          'x': (a, b) => a * b,
-          '/': (a, b) => b !== 0 ? a / b : "Error",
+        try {
+          const result = {
+            '+': (a, b) => a + b,
+            '-': (a, b) => a - b,
+            'x': (a, b) => a * b,
+            '/': (a, b) => {
+              if (b === 0) throw new Error("Division by zero");
+              return a / b;
+            },
+          };
+          return result[sign](a, b);
+        } catch (error) {
+          return "Error";
         }
-        return result[sign](a, b);
       }
       const result = math(calc.res, calc.num, calc.sign);
       const operation = `${calc.res} ${calc.sign} ${calc.num} =`;
@@ -136,6 +156,16 @@ const Button = ({ value }) => {
   };
 
   const handleBtnClick = () => {
+    // Reset error state for any new input
+    if (calc.num === "Error" && value !== 'C') {
+      setCalc({
+        ...calc,
+        num: 0,
+        res: 0,
+        sign: ''
+      });
+    }
+
     const results = {
       '.': commaClick,
       'C': resetClick,
