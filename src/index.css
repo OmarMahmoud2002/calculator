@@ -61,3 +61,49 @@ body {
 .opt {
   background: #f79505;
 }
+
+.history-panel {
+  max-width: 320px;
+  margin: 20px auto;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.clear-history-btn {
+  padding: 5px 10px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clear-history-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.history-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.operation {
+  color: #666;
+  margin-right: 15px;
+}
+
+.result {
+  font-weight: bold;
+  color: #2c3e50;
+}
