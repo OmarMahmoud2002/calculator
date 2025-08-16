@@ -8,6 +8,11 @@ const getStyleName = btn => {
     '-': 'opt',
     '+': 'opt',
     '/': 'opt',
+    '√': 'sci',
+    'x²': 'sci',
+    'sin': 'sci',
+    'cos': 'sci',
+    'tan': 'sci'
   }
   return className[btn]
 }
@@ -86,8 +91,39 @@ const Button = ({ value }) => {
     })
   }
 
-  const handleBtnClick = () => {
+  const handleScientific = () => {
+    const currentValue = calc.num || calc.res || 0;
+    let result;
     
+    switch(value) {
+      case '√': 
+        result = Math.sqrt(currentValue);
+        break;
+      case 'x²':
+        result = Math.pow(currentValue, 2);
+        break;
+      case 'sin':
+        result = Math.sin(currentValue * (Math.PI / 180)); // Convert to radians
+        break;
+      case 'cos':
+        result = Math.cos(currentValue * (Math.PI / 180));
+        break;
+      case 'tan':
+        result = Math.tan(currentValue * (Math.PI / 180));
+        break;
+      default:
+        return;
+    }
+    
+    setCalc({
+      ...calc,
+      num: result,
+      res: result,
+      sign: ''
+    });
+  };
+
+  const handleBtnClick = () => {
     const results = {
       '.': commaClick,
       'C': resetClick,
@@ -97,7 +133,12 @@ const Button = ({ value }) => {
       '+': signClick,
       '=': equalsClick,
       '%': persenClick,
-      '+-': invertClick
+      '+-': invertClick,
+      '√': handleScientific,
+      'x²': handleScientific,
+      'sin': handleScientific,
+      'cos': handleScientific,
+      'tan': handleScientific
     }
     if(results[value]) {
       return results[value]()
