@@ -51,7 +51,7 @@ As a user, I want the calculator to display errors (e.g., "Division by zero") in
 ### Technical Requirements
 * Check for division by zero and other invalid operations.
 * Set a maximum digit limit (e.g., 12 digits).
-* Display error messages on the screen instead of `NaN` or `Infinity`.
+* Display error messages on the screen instead of `Erorr` .
 
 ### Files Likely to be Modified
 `Calculator.js`, `App.js`.
