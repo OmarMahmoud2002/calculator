@@ -26,6 +26,7 @@ function App() {
             />
           ))}
         </ButtonBox>
+        <History />
       </Wrapper>
     </CalcProvider>
   );

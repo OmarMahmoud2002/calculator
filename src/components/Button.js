@@ -67,10 +67,13 @@ const Button = ({ value }) => {
         }
         return result[sign](a, b);
       }
+      const result = math(calc.res, calc.num, calc.sign);
+      const operation = `${calc.res} ${calc.sign} ${calc.num} =`;
       setCalc({
-        res: math(calc.res, calc.num, calc.sign),
+        res: result,
         sign: '',
-        num: 0
+        num: 0,
+        history: [...calc.history, {operation, result}]
       })
     }
   }

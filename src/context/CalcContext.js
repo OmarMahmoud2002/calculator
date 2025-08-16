@@ -5,11 +5,21 @@ const CalcProvider = ({ children }) => {
   const [calc, setCalc] = useState({
     sign: "",
     num: 0,
-    res: 0
+    res: 0,
+    history: []
   });
 
+  const clearHistory = () => {
+    setCalc(prev => ({
+      ...prev,
+      history: []
+    }));
+  };
+
   const providerValue = {
-    calc, setCalc
+    calc, 
+    setCalc,
+    clearHistory
   }
 
   return (
