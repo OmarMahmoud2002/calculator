@@ -22,9 +22,26 @@ const Button = ({ value }) => {
 
   // User click comma
   const commaClick = () => {
+    // Reset if previous result was error
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+      return;
+    }
+    
+    // Don't add decimal if already exists
+    if (calc.num.toString().includes('.')) {
+      return;
+    }
+    
+    // Limit digits including decimal
+    const currentStr = calc.num.toString();
+    if (currentStr.replace('-', '').length >= 11) { // Leave room for decimal
+      return;
+    }
+    
     setCalc({
       ...calc,
-      num: !calc.num.toString().includes('.') ? calc.num + value : calc.num
+      num: calc.num.toString() + '.'
     });
   }
   // User click C
@@ -39,34 +56,47 @@ const Button = ({ value }) => {
   // User click number
   const handleClickButton = () => {
     // Reset if previous result was error
-    const currentValue = calc.num === "Error" ? "0" : calc.num.toString();
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+    }
     
-    // Limit to 12 digits max
-    if (currentValue.replace('.', '').length >= 12) {
+    const currentValue = calc.num.toString();
+    
+    // Limit to 12 digits max (excluding decimal point)
+    const digitCount = currentValue.replace('.', '').replace('-', '').length;
+    if (digitCount >= 12) {
         return;
     }
 
     let numberValue;
     const numberString = value.toString();
     
-    // Handle decimal point
-    if (numberString === '.') {
-        if (currentValue.includes('.')) return;
-        numberValue = currentValue + '.';
+    // Allow multiple zeros only if there's already a decimal point
+    if (numberString === '0' && calc.num === 0 && !currentValue.includes('.')) {
+        return; // Don't add leading zeros
     } else {
-        numberValue = currentValue === '0' ? numberString : currentValue + numberString;
+        // If current number is 0 and new input is not 0, replace it
+        if (calc.num === 0 && numberString !== '0') {
+            numberValue = Number(numberString);
+        } else {
+            // Append the digit
+            numberValue = Number(currentValue + numberString);
+        }
     }
 
-    // Convert back to number if not ending with decimal
-    const numericValue = numberValue.endsWith('.') ? numberValue : Number(numberValue);
-    
     setCalc({
         ...calc,
-        num: numericValue
+        num: numberValue
     })
   }
   // User click operation
   const signClick = () => {
+    // Reset if previous result was error
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+      return;
+    }
+    
     setCalc({
       ...calc,
       sign: value,
@@ -76,7 +106,13 @@ const Button = ({ value }) => {
   }
   // User click equals
   const equalsClick = () => {
-    if(calc.res && calc.num) {
+    // Reset if previous result was error
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+      return;
+    }
+    
+    if(calc.res && calc.num && calc.sign) {
       const math = (a, b, sign) => {
         try {
           const result = {
@@ -84,11 +120,18 @@ const Button = ({ value }) => {
             '-': (a, b) => a - b,
             'x': (a, b) => a * b,
             '/': (a, b) => {
-              if (b === 0) throw new Error("Division by zero");
+              if (b === 0) return "Error";
               return a / b;
             },
           };
-          return result[sign](a, b);
+          const calcResult = result[sign](a, b);
+          
+          // Check for invalid results
+          if (calcResult === Infinity || calcResult === -Infinity || isNaN(calcResult)) {
+            return "Error";
+          }
+          
+          return calcResult;
         } catch (error) {
           return "Error";
         }
@@ -105,45 +148,103 @@ const Button = ({ value }) => {
   }
   // User click persen
   const persenClick = () => {
-    setCalc({
-      ...calc,
-      num: (calc.num / 100),
-      res: (calc.res / 100),
-      sign: ''
-    })
+    // Reset if previous result was error
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+      return;
+    }
+    
+    try {
+      const newNum = calc.num / 100;
+      const newRes = calc.res / 100;
+      
+      // Check for invalid results
+      if (isNaN(newNum) || isNaN(newRes) || !isFinite(newNum) || !isFinite(newRes)) {
+        setCalc({ ...calc, num: "Error" });
+        return;
+      }
+      
+      setCalc({
+        ...calc,
+        num: newNum,
+        res: newRes,
+        sign: ''
+      })
+    } catch (error) {
+      setCalc({ ...calc, num: "Error" });
+    }
   }
   // User click invert button
   const invertClick = () => {
-    setCalc({
-      ...calc,
-      num: calc.num ? calc.num * -1 : 0,
-      res: calc.res ? calc.res * -1 : 0,
-      sign: ''
-    })
+    // Reset if previous result was error
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+      return;
+    }
+    
+    try {
+      // Only invert the current number being displayed
+      const currentValue = calc.num !== 0 ? calc.num : calc.res;
+      const invertedValue = currentValue * -1;
+      
+      // Check for invalid results
+      if (isNaN(invertedValue) || !isFinite(invertedValue)) {
+        setCalc({ ...calc, num: "Error" });
+        return;
+      }
+      
+      if (calc.num !== 0) {
+        setCalc({ ...calc, num: invertedValue });
+      } else {
+        setCalc({ ...calc, res: invertedValue });
+      }
+    } catch (error) {
+      setCalc({ ...calc, num: "Error" });
+    }
   }
 
   const handleScientific = () => {
+    // Reset if previous result was error
+    if (calc.num === "Error" || calc.res === "Error") {
+      setCalc({ sign: '', num: 0, res: 0, history: calc.history || [] });
+      return;
+    }
+    
     const currentValue = calc.num || calc.res || 0;
     let result;
     
-    switch(value) {
-      case '√': 
-        result = currentValue >= 0 ? Math.sqrt(currentValue) : "Error";
-        break;
-      case 'x²':
-        result = Math.pow(currentValue, 2);
-        break;
-      case 'sin':
-        result = Math.sin(currentValue * (Math.PI / 180)); // Convert to radians
-        break;
-      case 'cos':
-        result = Math.cos(currentValue * (Math.PI / 180));
-        break;
-      case 'tan':
-        result = Math.tan(currentValue * (Math.PI / 180));
-        break;
-      default:
-        return;
+    try {
+      switch(value) {
+        case '√': 
+          if (currentValue < 0) {
+            result = "Error";
+          } else {
+            result = Math.sqrt(currentValue);
+          }
+          break;
+        case 'x²':
+          result = Math.pow(currentValue, 2);
+          break;
+        case 'sin':
+          result = Math.sin(currentValue * (Math.PI / 180));
+          break;
+        case 'cos':
+          result = Math.cos(currentValue * (Math.PI / 180));
+          break;
+        case 'tan':
+          result = Math.tan(currentValue * (Math.PI / 180));
+          break;
+        default:
+          return;
+      }
+      
+      // Check for invalid results
+      if (result !== "Error" && (isNaN(result) || !isFinite(result))) {
+        result = "Error";
+      }
+      
+    } catch (error) {
+      result = "Error";
     }
     
     setCalc({
@@ -175,7 +276,8 @@ const Button = ({ value }) => {
       '+': signClick,
       '=': equalsClick,
       '%': persenClick,
-      '+-': invertClick,
+      '+/-': invertClick,
+      '+-': invertClick,  // Fallback for legacy references
       '√': handleScientific,
       'x²': handleScientific,
       'sin': handleScientific,

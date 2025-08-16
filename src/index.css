@@ -37,33 +37,48 @@ body {
 }
 
 .screen {
-  height: 5rem;
+  height: 7rem;
   margin-bottom: 2rem;
   background: #1a1a2e;
-  border-radius: 15px;
+  border-radius: 20px;
   color: #00d2ff;
-  font-size: 2.5rem;
-  font-weight: 300;
+  font-size: 2.2rem;
+  font-weight: 400;
   text-align: right;
-  padding: 0 1.5rem;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
-  border: 2px solid #16213e;
+  padding: 1rem 2rem;
+  box-shadow: 
+    inset 0 4px 15px rgba(0,0,0,0.4),
+    0 2px 10px rgba(0,210,255,0.1);
+  border: 3px solid #16213e;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .screen:hover {
-  box-shadow: inset 0 2px 15px rgba(0,0,0,0.4);
+  box-shadow: 
+    inset 0 4px 20px rgba(0,0,0,0.5),
+    0 4px 15px rgba(0,210,255,0.2);
+}
+
+.screen-text {
+  letter-spacing: 0.05em;
+  font-family: 'Inter', monospace;
+  text-shadow: 0 0 10px rgba(0,210,255,0.3);
 }
 
 .wrapper {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  width: min(28rem, 95vw);
-  padding: 2.5rem;
+  width: min(40rem, 95vw);
+  padding: 3rem;
   margin-top: 2rem;
-  border-radius: 25px;
+  border-radius: 30px;
   box-shadow: 
-    0 20px 40px rgba(0,0,0,0.1),
+    0 25px 50px rgba(0,0,0,0.15),
     0 0 0 1px rgba(255,255,255,0.2);
   border: 1px solid rgba(255,255,255,0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -122,23 +137,24 @@ body {
 
 .button {
   background: linear-gradient(145deg, #ffffff, #e6e6e6);
-  height: 4rem;
+  height: 5rem;
   padding: 0;
-  border-radius: 15px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: #2c3e50;
   border: none;
-  font-size: 1.3rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
   transition: all 0.2s ease;
   box-shadow: 
-    0 4px 8px rgba(0,0,0,0.1),
+    0 6px 12px rgba(0,0,0,0.12),
     inset 0 1px 0 rgba(255,255,255,0.8);
   position: relative;
   overflow: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
 .button::before {
@@ -286,18 +302,20 @@ body {
   
   .wrapper {
     width: 100%;
-    padding: 1.5rem;
+    padding: 2rem;
     margin-top: 1rem;
   }
   
   .screen {
-    height: 4rem;
-    font-size: 2rem;
+    height: 6rem;
+    font-size: 1.8rem;
     margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
   }
   
   .button {
-    height: 3.5rem;
+    height: 4.5rem;
+    font-size: 1.4rem;
     font-size: 1.1rem;
   }
   

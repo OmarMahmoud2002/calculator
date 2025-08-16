@@ -9,7 +9,7 @@
 
 .grid-layout {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   grid-template-areas:
     "scientific scientific"
     "numbers operators";
@@ -20,8 +20,8 @@
   grid-area: scientific;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .main-panel {
@@ -31,14 +31,14 @@
 .number-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .operator-panel {
   grid-area: operators;
   display: grid;
   grid-template-rows: repeat(4, 1fr);
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 @media (max-width: 768px) {

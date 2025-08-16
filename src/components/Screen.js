@@ -13,10 +13,19 @@ const Screen = () => {
     
     // Format large numbers and limit decimal places
     if (typeof value === 'number') {
-        if (Math.abs(value) >= 1e12) {
-            return value.toExponential(6);
+        // For very large numbers, use scientific notation
+        if (Math.abs(value) >= 1e10) {
+            return value.toExponential(5);
         }
-        return value.toString().length > 12 ? value.toPrecision(12) : value;
+        
+        // For regular numbers, format with proper decimal places
+        const valueStr = value.toString();
+        if (valueStr.length > 12) {
+            // If too long, use precision
+            return Number(value.toPrecision(10)).toString();
+        }
+        
+        return valueStr;
     }
     return value; // Return "Error" string directly
   };
@@ -24,9 +33,23 @@ const Screen = () => {
   const displayValue = calc.num !== 0 ? calc.num : calc.res;
 
   return (
-    <Textfit className="screen" max={70} mode="single">
-      {formatDisplay(displayValue)}
-    </Textfit>
+    <div className="screen">
+      <Textfit 
+        className="screen-text" 
+        max={50} 
+        min={20}
+        mode="single"
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end'
+        }}
+      >
+        {formatDisplay(displayValue)}
+      </Textfit>
+    </div>
   )
 }
 
